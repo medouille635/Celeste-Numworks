@@ -309,6 +309,8 @@ static int deaths, max_djump;
 static bool start_game;
 static int start_game_flash;
 
+static bool inf_dash_enabled = false;  
+
 #ifdef CALCULATOR_SAVING
 // Not actually required for saving, it just makes it
 // fairer because loading puts you back at the start
@@ -323,7 +325,8 @@ enum {
   k_up    = 2,
   k_down  = 3,
   k_jump  = 4,
-  k_dash  = 5
+  k_dash  = 5,
+  k_inf_dash = 6
 };
 
 //with this X macro table thing we can define the properties that each object type has, in the original lua code these properties
@@ -692,6 +695,11 @@ static void PLAYER_init(OBJ* this) {
 static OBJ player_dummy_copy; //see below
 static void PLAYER_update(OBJ* this) {
 	if (pause_player) return;
+		if (P8btn(k_inf_dash)) {
+    		if (!this->p_dash) {   // évite la répétition si touche maintenue
+       			inf_dash_enabled = !inf_dash_enabled;
+    }
+}
    
 	int input = P8btn(k_right) ? 1 : (P8btn(k_left) ? -1 : 0);
 
@@ -830,6 +838,8 @@ static void PLAYER_update(OBJ* this) {
    
 		if (this->djump>0 && dash) {
 			init_object(OBJ_SMOKE,this->x,this->y);
+			if (!inf_dash_enabled)      
+
 			this->djump-=1;
 			this->dash_time=4;
 			has_dashed=true;
