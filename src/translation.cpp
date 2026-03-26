@@ -239,7 +239,7 @@ int emulator(CELESTE_P8_CALLBACK_TYPE call, ...) {
 		case CELESTE_P8_BTN: { //btn(b)
 			int b = INT_ARG();
 
-			if (!(b >= 0 && b <= 5)) { return 0; };
+			if (!(b >= 0 && b <= 6)) { return 0; };
 			RET_BOOL(emuBtnState & (1 << b));
 		} break;
 
@@ -472,6 +472,8 @@ void emuInput() {
 	if (state.keyDown(Keyboard::Key::Down))  emuBtnState |= (1<<3);
 	if (state.keyDown(Keyboard::Key::Back)) emuBtnState |= (1<<4);
 	if (state.keyDown(Keyboard::Key::OK)) emuBtnState |= (1<<5);
+	if (state.keyDown(Keyboard::Key::EXE)) emuBtnState |= (1<<6);
+
 }
 
 void gameMain() {
